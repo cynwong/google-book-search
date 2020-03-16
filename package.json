@@ -10,7 +10,7 @@
     "client": "npm run start --prefix=\"client\"",
     "seed": "node scripts/seedDB.js",
     "install": "npm install --prefix=\"client\"",
-    "build": "npm run build  --prefix=\"client\"",
+    "build": "NPM_CONFIG_PRODUCTION=false npm run build  --prefix=\"client\"",
     "heroku-postbuild": "npm run build"
   },
   "author": "",
