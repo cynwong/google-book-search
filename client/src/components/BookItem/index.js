@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import { Row, Col, Container } from '../Grid';
 
-import API from '../../utils/API';
+import BookContext from '../../utils/BookContext';
 
 export default function BookItem(props) {
+	const { saveBook, deleteBook } = useContext(BookContext);
 	const { book: {
 		title,
 		authors,
 		description,
 		id,
 		link,
-		image
+		image,
+		isSaved
 	} } = props;
 
 	const authorNames = authors ? authors.join(', ') : '';
@@ -23,7 +25,7 @@ export default function BookItem(props) {
 
 	const handleSaveBook = (e) => {
 		e.preventDefault();
-		API.saveBook({
+		saveBook({
 			title,
 			authors,
 			description,
@@ -31,6 +33,10 @@ export default function BookItem(props) {
 			link,
 			image
 		});
+	}
+	const handleDeleteBook = (e) => {
+		e.preventDefault();
+		deleteBook(id);
 	}
 	const defaultPlaceHolder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOMrgcAATsA3BT31OAAAAAASUVORK5CYII=";
 	return (
@@ -41,13 +47,22 @@ export default function BookItem(props) {
 						<h4>{title}</h4>
 						<p>Written By {authorNames}</p>
 					</Col>
-					<Col>
-						<button className="btn btn-success"  style={{ marginRight:'5px' }} onClick={handleViewBook}>
+					<Col className="p-0" >
+						<button className="btn btn-info" style={{marginRight:'3px'}} onClick={handleViewBook}>
 							View
 						</button>
-						<button className="btn btn-success" onClick={handleSaveBook}>
-							Save
-						</button>
+						{isSaved ? (
+							<button className="btn btn-danger" onClick={handleDeleteBook}>
+								Delete
+							</button>
+						) : (
+							<button className="btn btn-info" onClick={handleSaveBook}>
+								Save
+							</button>
+							
+						)
+						}
+						
 					</Col>
 				</Row>
 				<Row>
