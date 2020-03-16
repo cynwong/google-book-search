@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, FormBtn } from "../components/Form";
 import BookItem from '../components/BookItem';
 
+import BookContext from '../utils/BookContext';
+
 export default function SearchBooks() {
+	const { books: savedBooks } = useContext(BookContext);
 	// Setting our component's initial state
-	const [books, setBooks] = useState([])
+	const [searchedBooks, setSearchedBooks] = useState([])
 	const [searchTerm, setSearchTerm] = useState('')
 
 	// Handles updating component state when the user types into the input field
@@ -22,15 +25,23 @@ export default function SearchBooks() {
 		event.preventDefault();
 		if(searchTerm){
 			API.searchBooks(searchTerm)
-				.then(({ data }) => {console.log(data);setBooks(data)})
+				.then(({ data }) => setSearchedBooks(data))
 				.catch(err => console.log(err));
 		}
 	};
 
+	function displaySearchResults(){
+		return searchedBooks.map((book) => {
+			const displayBook = book;
+			displayBook.isSaved = savedBooks.find((b) => b.googleId === book.id )  ? true : false;
+			return (<BookItem key={book.id} book={displayBook}/>);
+		})
+	}
+
 	return (
 		<Container fluid className='my-5 mx-auto'>
 			<Row className='border'>
-				<Col>
+				<Col className='offset-1' size='9'>
 					<form >
 						<h3>Book</h3>
 						<Input
@@ -49,11 +60,9 @@ export default function SearchBooks() {
 			<Row>
 				<Col>
 					<h3>Results</h3>
-					{books.length ? (
+					{searchedBooks.length ? (
 						<Container>
-							{books.map(book => (
-								<BookItem key={book.id} book={book}/>
-							))}
+							{displaySearchResults()}
 						</Container>
 					) : (
 						<p>No Results to Display</p>
