@@ -4,7 +4,7 @@ import React from "react";
 
 // This Container component allows us to use a bootstrap container without worrying about class names
 export function Container({ fluid, children, className }) {
-	const classNames = `container${fluid ? "-fluid" : ""} ${className}`;
+	const classNames = `container${fluid ? "-fluid" : ""}${className? ` ${className}`: ''}`;
   return <div className={classNames}>{children}</div>;
 }
 
@@ -15,15 +15,17 @@ export function Row({ fluid, children }) {
 
 // This Col component lets us size bootstrap columns with less syntax
 // e.g. <Col size="md-12"> instead of <div className="col-md-12">
-export function Col({ size, children }) {
-  return (
-    <div
-      className={!size ? 'col' : size
-        .split(" ")
-        .map(size => "col-" + size)
-        .join(" ")}
-    >
-      {children}
-    </div>
-  );
+export function Col({ size, children,className }) {
+	let classNames = !size ? 'col' : size
+						.split(" ")
+						.map(size => "col-" + size)
+						.join(" ");
+	classNames += className ? ` ${className}` : '';
+	return (
+		<div
+		className={classNames}
+		>
+		{children}
+		</div>
+	);
 }
