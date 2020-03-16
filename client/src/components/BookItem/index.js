@@ -11,6 +11,7 @@ export default function BookItem(props) {
 		authors,
 		description,
 		id,
+		googleId,
 		link,
 		image,
 		isSaved
@@ -36,7 +37,8 @@ export default function BookItem(props) {
 	}
 	const handleDeleteBook = (e) => {
 		e.preventDefault();
-		deleteBook(id);
+		let idToBeDeleted = id ? id : googleId;
+		deleteBook(idToBeDeleted);
 	}
 	const defaultPlaceHolder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOMrgcAATsA3BT31OAAAAAASUVORK5CYII=";
 	return (
